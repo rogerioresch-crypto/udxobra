@@ -797,15 +797,8 @@ window.toggleAuth=()=>{
   document.getElementById('auth-switch').innerHTML=authMode==='login'?'Não tem conta? <span onclick="toggleAuth()">Criar conta</span>':'Já tem conta? <span onclick="toggleAuth()">Entrar</span>';
   document.getElementById('auth-err').textContent='';
 };
-window.authAction=async()=>{
-  const email=$v('auth-email'),pass=$v('auth-pass'),pass2=$v('auth-pass2'),err=document.getElementById('auth-err');
-  err.textContent='';
-  if(!email||!pass){err.textContent='Preencha email e senha.';return;}
-  if(authMode==='register'&&pass!==pass2){err.textContent='Senhas não conferem.';return;}
-  try{ authMode==='login'?await signInWithEmailAndPassword(auth,email,pass):await createUserWithEmailAndPassword(auth,email,pass); }
-  catch(e){ const m={'auth/user-not-found':'Usuário não encontrado.','auth/wrong-password':'Senha incorreta.','auth/email-already-in-use':'Email já em uso.','auth/weak-password':'Senha fraca (mín. 6 caracteres).','auth/invalid-email':'Email inválido.','auth/invalid-credential':'Email ou senha incorretos.'};err.textContent=m[e.code]||e.message; }
-};
-window.logout=async()=>{ if(!confirm('Sair da conta?'))return; unsubs.forEach(u=>u()); await signOut(auth); };
+window.authAction=()=>{};
+window.logout=()=>{};
 
 // Sem login — iniciar direto
 document.getElementById('loading-screen').style.display='none';
