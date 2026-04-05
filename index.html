@@ -744,15 +744,13 @@ textarea{resize:vertical;min-height:80px;}
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, doc, setDoc, collection, addDoc, deleteDoc, updateDoc, onSnapshot, query, orderBy, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const cfg = { apiKey:"AIzaSyBOfQ2wjcaQ4Wu2BrNB6DmadK7p-FgrP6o", authDomain:"udx-obra.firebaseapp.com", projectId:"udx-obra", storageBucket:"udx-obra.firebasestorage.app", messagingSenderId:"18220649164", appId:"1:18220649164:web:178c030cd0d2464ff29069" };
 const fbApp = initializeApp(cfg);
-const auth = getAuth(fbApp);
 const fdb = getFirestore(fbApp);
 
-let uid = null;
+let uid = 'A1ICzdRzUQYD82vbS1pAVGPCjOi2';
 let C = { obra:{}, etapas:[], contas:[], recibos:[], fornecedores:[], documentos:[], atividades:[], materiais:[], cotacoes:[], diario:[], trabalhadores:[], pagamentos:[] };
 let unsubs = [];
 
@@ -809,20 +807,12 @@ window.authAction=async()=>{
 };
 window.logout=async()=>{ if(!confirm('Sair da conta?'))return; unsubs.forEach(u=>u()); await signOut(auth); };
 
-onAuthStateChanged(auth,user=>{
-  document.getElementById('loading-screen').style.display='none';
-  if(user){
-    uid=user.uid;
-    document.getElementById('app').style.display='flex';
-    document.getElementById('user-lbl').textContent=user.email;
-    startListeners(); checkMigration();
-  } else {
-    // Sessão expirada — tentar login automático
-    document.getElementById('app').style.display='flex';
-    document.getElementById('user-lbl').textContent='Reconectando...';
-    document.getElementById('auth-err').textContent='Sessão expirada. Recarregue a página.';
-  }
-});
+// Sem login — iniciar direto
+document.getElementById('loading-screen').style.display='none';
+document.getElementById('app').style.display='flex';
+document.getElementById('user-lbl').textContent='rogerioresch1@gmail.com';
+startListeners();
+checkMigration();
 
 // MIGRATION
 function checkMigration(){
