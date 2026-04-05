@@ -243,19 +243,17 @@ textarea{resize:vertical;min-height:80px;}
   <div class="ld-bar"><div class="ld-fill"></div></div>
 </div>
 
-<div id="auth-screen">
+<div id="auth-screen" style="display:none!important">
   <div class="auth-box">
     <div class="auth-logo">UD<span>X</span></div>
     <div class="auth-tagline">CONSTRUTORA · GESTÃO DE OBRA</div>
-    <div class="auth-title" id="auth-title">Entrar na sua conta</div>
-    <div class="auth-form">
-      <input class="auth-input" type="email" id="auth-email" placeholder="seu@email.com">
-      <input class="auth-input" type="password" id="auth-pass" placeholder="Senha" onkeydown="if(event.key==='Enter')authAction()">
-      <input class="auth-input" type="password" id="auth-pass2" placeholder="Confirmar senha" style="display:none" onkeydown="if(event.key==='Enter')authAction()">
-      <div class="auth-err" id="auth-err"></div>
-      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:11px" onclick="authAction()" id="auth-btn">Entrar</button>
-    </div>
-    <div class="auth-switch" id="auth-switch">Não tem conta? <span onclick="toggleAuth()">Criar conta</span></div>
+    <div class="auth-err" id="auth-err"></div>
+    <div id="auth-title" style="display:none"></div>
+    <div id="auth-switch" style="display:none"></div>
+    <input id="auth-email" style="display:none">
+    <input id="auth-pass" style="display:none">
+    <input id="auth-pass2" style="display:none">
+    <button id="auth-btn" style="display:none"></button>
   </div>
 </div>
 
@@ -813,8 +811,17 @@ window.logout=async()=>{ if(!confirm('Sair da conta?'))return; unsubs.forEach(u=
 
 onAuthStateChanged(auth,user=>{
   document.getElementById('loading-screen').style.display='none';
-  if(user){ uid=user.uid; document.getElementById('auth-screen').style.display='none'; document.getElementById('app').style.display='flex'; document.getElementById('user-lbl').textContent=user.email; startListeners(); checkMigration(); }
-  else { uid=null; document.getElementById('app').style.display='none'; document.getElementById('auth-screen').style.display='flex'; }
+  if(user){
+    uid=user.uid;
+    document.getElementById('app').style.display='flex';
+    document.getElementById('user-lbl').textContent=user.email;
+    startListeners(); checkMigration();
+  } else {
+    // Sessão expirada — tentar login automático
+    document.getElementById('app').style.display='flex';
+    document.getElementById('user-lbl').textContent='Reconectando...';
+    document.getElementById('auth-err').textContent='Sessão expirada. Recarregue a página.';
+  }
 });
 
 // MIGRATION
